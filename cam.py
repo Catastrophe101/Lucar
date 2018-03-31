@@ -1,5 +1,3 @@
-#C:\Users\saurabhj\OneDrive\Documents\Python Scripts\IRC\ABC
-#C:\software\rl\ABC
 import cv2
 import numpy as np
 
