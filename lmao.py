@@ -3,10 +3,10 @@ from flask import Flask
 import subprocess
 import os
 import signal
+import psutil
+
 
 pro=None
-
-main_flag=True #1
 
 app=Flask(__name__)
 @app.route('/on')
@@ -17,11 +17,18 @@ def on():
     return "ON"
 @app.route('/off')
 def off():
-    global main_flag #1
     global pro
-    main_flag=False #1
-    pro.kill()
+    parent=psutil.Process(pro.pid)
+    children=parent.children(recursive=True)
+    for child in children:
+        child.kill()
+    parent.kill()
+    parent.wait(5)
+    #pro.kill()
     #patternrec.loloff()
+    #killstr="kill -9"+str(pro.pid)
+    #print killstr
+    #prokill=subprocess.Popen([killstr],stdout=subprocess.PIPE,shell=False)
     return "OFF"
     '''try:
         os.killpg(os.getpgid(process.pid),signal.SIGTERM)
